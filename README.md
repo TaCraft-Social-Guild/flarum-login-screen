@@ -50,7 +50,7 @@ php flarum cache:clear
 ## 更新
 
 ```sh
-composer update tacraft-social-guild/flarum-login-screen:"*"
+composer update tacraft-social-guild/flarum-login-screen
 php flarum cache:clear
 ```
 
