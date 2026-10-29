@@ -403,7 +403,7 @@ const tooltipExtender: IExtender = {
   extend() {
     /**
      * 初始化器在 app 启动时执行；此时 DOM 已就绪，而 app.forum 可能仍在创建中，
-     * 因此读取设置统一走 getConfiguredColumns() 的安全回退。
+     * 因此读取设置统一走 readForumSetting() 的多级安全回退。
      */
     app.initializers.add('tacraft-social-guild-login-screen', () => {
       try {

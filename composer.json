@@ -26,9 +26,11 @@
             "title": "Login Screen",
             "category": "",
             "icon": {
-                "name": "",
-                "color": "",
-                "backgroundColor": ""
+                "image": "icon.svg",
+                "backgroundColor": "#3D5AFE",
+                "backgroundSize": "contain",
+                "backgroundRepeat": "no-repeat",
+                "backgroundPosition": "center"
             }
         },
         "flarum-cli": {
