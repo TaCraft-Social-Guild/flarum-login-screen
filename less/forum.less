@@ -1,0 +1,109 @@
+.LogInModal {
+  width: 100%;
+  max-width: 430px;
+}
+
+.LogInModal .Modal-content {
+  overflow: hidden;
+  border: 1px solid var(--control-bg);
+  border-radius: 22px;
+  background: var(--body-bg);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.2);
+}
+
+.LogInModal .Modal-header {
+  position: relative;
+  overflow: hidden;
+  padding: 36px 30px 26px;
+  background: var(--control-bg);
+  border-bottom: 3px solid var(--primary-color);
+  text-align: center;
+}
+
+.LogInModal .Modal-header::before {
+  position: absolute;
+  top: -54px;
+  right: -34px;
+  width: 150px;
+  height: 150px;
+  border: 1px solid color-mix(in srgb, var(--primary-color) 24%, transparent);
+  border-radius: 50%;
+  content: '';
+  pointer-events: none;
+}
+
+.LogInModal .Modal-header h3 {
+  position: relative;
+  margin: 0;
+  color: var(--text-color);
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.LogInModal .Modal-body {
+  padding: 26px 30px 8px;
+  background: var(--body-bg);
+  color: var(--text-color);
+}
+
+.LogInModal .Form-group {
+  margin-bottom: 16px;
+}
+
+.LogInModal .FormControl {
+  min-height: 48px;
+  padding: 12px 15px;
+  border-radius: 12px;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.LogInModal .FormControl:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 18%, transparent);
+}
+
+.LogInModal .checkbox {
+  line-height: 1.5;
+}
+
+.LogInModal .Button--primary {
+  min-height: 48px;
+  border: 0;
+  border-radius: 12px;
+  font-weight: 700;
+  transition: filter 0.18s ease, transform 0.18s ease;
+}
+
+.LogInModal .Button--primary:hover:not(:disabled) {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+
+.LogInModal .LogInButtons:empty {
+  display: none;
+}
+
+.LogInModal .LogInButtons > * {
+  margin-bottom: 12px;
+}
+
+.LogInModal .Modal-footer {
+  padding: 10px 24px 24px;
+  background: var(--body-bg);
+}
+
+.LogInModal .Modal-footer p {
+  margin: 8px 0 0;
+}
+
+.LogInModal .Modal-footer .Button--link {
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .LogInModal .FormControl,
+  .LogInModal .Button--primary {
+    transition: none;
+  }
+}
