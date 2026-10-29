@@ -7,5 +7,6 @@ jobs:
     uses: flarum/framework/.github/workflows/REUSABLE_backend.yml@2.x
     with:
       enable_backend_testing: true
-
+      php_versions: '["8.5"]'
+      db_versions: '["sqlite:3"]'
       backend_directory: .
