@@ -1,7 +1,10 @@
 tacraft-social-guild-login-screen:
-  # For more details on the format
-  # Checkout https://docs.flarum.org/2.x/extend/i18n/#appendix-a-standard-key-format
   admin:
-    my_cool_key: My Cool Key
-
-  forum:
+    settings:
+      login_buttons_per_row_label: Login buttons per row
+      login_buttons_per_row_help: Choose how many social login buttons to display on each row (1–4).
+      login_button_size_label: Login button size
+      login_button_size_help: Set the width and height of each social login button.
+      login_button_tooltip_delay_label: Button tooltip delay
+      login_button_tooltip_delay_help: Set how long the pointer must stay over a button before its provider name appears.
+      tooltip_delay_immediate: Immediately

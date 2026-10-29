@@ -1,0 +1,10 @@
+tacraft-social-guild-login-screen:
+  admin:
+    settings:
+      login_buttons_per_row_label: 每行登录按钮数量
+      login_buttons_per_row_help: 设置每行显示的第三方登录按钮数量（1–4）。
+      login_button_size_label: 登录按钮尺寸
+      login_button_size_help: 设置每个第三方登录按钮的宽度和高度。
+      login_button_tooltip_delay_label: 按钮提示延迟
+      login_button_tooltip_delay_help: 设置鼠标停留多久后显示登录平台名称。
+      tooltip_delay_immediate: 立即显示
