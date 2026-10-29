@@ -1,0 +1,17 @@
+/vendor
+composer.lock
+composer.phar
+
+.DS_Store
+Thumbs.db
+tests/.phpunit.cache
+tests/.phpunit.result.cache
+/tests/integration/tmp
+.vagrant
+.idea/*
+.vscode
+js/coverage-ts
+
+# IDE 文件监视器（lessc）生成的本地编译产物，不参与 Flarum 资源编译
+#less/*.css
+#less/*.css.map

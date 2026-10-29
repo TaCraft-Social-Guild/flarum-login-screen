@@ -1,0 +1,408 @@
+.LogInModal {
+  --login-button-tooltip-delay: @login-button-tooltip-delay;
+  width: 100%;
+  max-width: 430px;
+  border-radius: 28px;
+  box-shadow: none;
+}
+
+/* 用弹窗管理器的可用视口居中，替代 Flarum 桌面端固定的 120px 上下外边距。 */
+/* 原版是固定边距，有点反人类了。*/
+.ModalManager:has(> .LogInModal) {
+  display: flex;
+  align-items: safe center;
+  justify-content: center;
+}
+
+.ModalManager > .LogInModal {
+  flex: 0 0 auto;
+  margin: 10px;
+}
+
+/* Flarum 默认将登录弹窗限制为 375px；按按钮设置扩展宽度，确保指定列数能完整显示。 */
+.LogInModal.Modal--small {
+  width: 100%;
+  max-width: 430px !important;
+}
+
+.LogInModal .Modal-content {
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--control-bg) 75%, transparent);
+  border-radius: 28px;
+  background: color-mix(in srgb, var(--body-bg) 92%, transparent);
+  box-shadow: 0 30px 70px -28px rgba(23, 30, 54, 0.3), 0 2px 10px rgba(23, 30, 54, 0.05);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+}
+
+.LogInModal .Modal-header {
+  position: relative;
+  overflow: hidden;
+  padding: 36px 30px 26px;
+  border-bottom: 1px solid color-mix(in srgb, var(--primary-color) 18%, var(--control-bg));
+  background:
+    radial-gradient(circle at 100% 0, color-mix(in srgb, var(--primary-color) 18%, transparent), transparent 42%),
+    linear-gradient(135deg, color-mix(in srgb, var(--primary-color) 8%, var(--body-bg)), var(--control-bg));
+  text-align: center;
+}
+
+.LogInModal .Modal-header::before {
+  position: absolute;
+  top: -54px;
+  right: -34px;
+  width: 150px;
+  height: 150px;
+  border: 1px solid color-mix(in srgb, var(--primary-color) 24%, transparent);
+  border-radius: 50%;
+  content: '';
+  pointer-events: none;
+}
+
+.LogInModal .Modal-header::after {
+  position: absolute;
+  top: -26px;
+  right: 24px;
+  width: 94px;
+  height: 94px;
+  border: 1px solid color-mix(in srgb, var(--primary-color) 16%, transparent);
+  border-radius: 50%;
+  content: '';
+  pointer-events: none;
+}
+
+.LogInModal .Modal-header h3 {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  color: var(--text-color);
+  font-size: 23px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.LogInModal .Modal-body {
+  padding: 26px 30px 8px;
+  background: transparent;
+  color: var(--text-color);
+}
+
+.LogInModal .Form-group {
+  margin-bottom: 8px;
+}
+
+.LogInModal .FormControl {
+  min-height: 48px;
+  padding: 12px 15px;
+  border: 1px solid color-mix(in srgb, var(--control-bg) 78%, var(--text-color));
+  border-radius: 12px;
+  background: var(--body-bg);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.LogInModal .FormControl::placeholder {
+  color: #9aa0a8;
+  font-weight: 600;
+  opacity: 1;
+}
+
+.LogInModal .FormControl:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 18%, transparent);
+}
+
+.LogInModal .checkbox {
+  line-height: 1.5;
+}
+
+.LogInModal .checkbox input {
+  accent-color: var(--primary-color);
+}
+
+.LogInModal .Button--primary {
+  min-height: 48px;
+  border: 0;
+  border-radius: 12px;
+  box-shadow: 0 10px 22px -12px color-mix(in srgb, var(--primary-color) 80%, transparent);
+  font-weight: 700;
+  transition: filter 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.LogInModal .Button--primary:hover:not(:disabled) {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 26px -12px color-mix(in srgb, var(--primary-color) 85%, transparent);
+}
+
+.LogInModal .Form-group:has(.checkbox) {
+  margin-bottom: 0;
+}
+
+.LogInModal .Form-group:has(.Button--primary) {
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+.LogInModal .LogInButtons:empty {
+  display: none;
+}
+
+
+/*如果你不知道你在干什么，就别改这一块儿的代码（很容易出问题）*/
+/* FoF/OAuth 会为每个登录按钮添加包装层；保持横向换行，并将按钮组居中。 */
+/* Flarum 未注入设置变量时使用默认值，便于本地 LESS 检查和独立编译。 */
+.login-buttons-default() when (default()) {
+  @login-buttons-per-row: 4;
+  @login-button-size: 56px;
+  @login-button-tooltip-delay: 500ms;
+}
+.login-buttons-default();
+
+.LogInModal .Modal-body .LogInButtons,
+.LogInModal .Modal-body .LogInButtons.FoFLogInButtons--icons {
+  /* 显式输出编译后的列数，论坛端脚本无法读取设置时可回退到该值。 */
+  --login-buttons-per-row: @login-buttons-per-row;
+  --login-button-size: @login-button-size;
+  display: grid !important;
+  grid-template-columns: repeat(var(--login-buttons-per-row, @login-buttons-per-row), var(--login-button-size, @login-button-size)) !important;
+  grid-auto-flow: row !important;
+  justify-content: center !important;
+  justify-items: center !important;
+  /* 主题（如 Concourse）会以 !important 强制 gap 与纵向排列，这里必须同样使用 !important 才能覆盖。 */
+  gap: 8px !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  width: max-content !important;
+  max-width: calc(100vw - 64px) !important;
+  margin: 0 auto 18px !important;
+}
+
+/* 最后一行只有一个按钮时让它占据整行网格区域，并在该区域内居中。 */
+.LogInModal .Modal-body .LogInButtons > .LoginButtons-single-final-item {
+  /* LESS 会把 “1 / -1” 当作除法，必须原样输出。 */
+  grid-column: ~'1 / -1';
+  justify-self: center;
+}
+
+.LogInModal .Modal-body .LogInButtons > *,
+.LogInModal .Modal-body .LogInButtons > .LogInButton,
+.LogInModal .Modal-body .LogInButtons > .LogInButtonContainer {
+  display: flex !important;
+  flex: 0 0 var(--login-button-size, @login-button-size) !important;
+  align-items: center;
+  justify-content: center;
+  width: var(--login-button-size, @login-button-size) !important;
+  min-width: var(--login-button-size, @login-button-size) !important;
+  max-width: var(--login-button-size, @login-button-size) !important;
+  height: var(--login-button-size, @login-button-size) !important;
+  min-height: var(--login-button-size, @login-button-size) !important;
+  max-height: var(--login-button-size, @login-button-size) !important;
+  margin: 0 !important;
+}
+
+.LogInModal .Modal-body .LogInButtons .LogInButton,
+.LogInModal .Modal-body .LogInButtons button,
+.LogInModal .Modal-body .LogInButtons a,
+.LogInModal .Modal-body .LogInButtons [role='button'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  width: var(--login-button-size, @login-button-size) !important;
+  min-width: var(--login-button-size, @login-button-size) !important;
+  max-width: var(--login-button-size, @login-button-size) !important;
+  height: var(--login-button-size, @login-button-size) !important;
+  min-height: var(--login-button-size, @login-button-size) !important;
+  max-height: var(--login-button-size, @login-button-size) !important;
+  aspect-ratio: 1;
+  font-size: 0;
+  line-height: 1;
+  margin: 0;
+  padding: 10px;
+  border: 1px solid color-mix(in srgb, var(--control-bg) 78%, var(--text-color));
+  border-radius: 16px;
+  background: var(--body-bg);
+  box-shadow: 0 4px 12px rgba(23, 30, 54, 0.06);
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.LogInModal .Modal-body .LogInButtons .LogInButton:hover,
+.LogInModal .Modal-body .LogInButtons button:hover,
+.LogInModal .Modal-body .LogInButtons a:hover,
+.LogInModal .Modal-body .LogInButtons [role='button']:hover {
+  border-color: color-mix(in srgb, var(--primary-color) 45%, var(--control-bg));
+  box-shadow: 0 10px 20px -12px color-mix(in srgb, var(--primary-color) 65%, transparent);
+  transform: translateY(-2px);
+}
+
+.LogInModal .Modal-body .LogInButtons .LogInButton:focus-visible,
+.LogInModal .Modal-body .LogInButtons button:focus-visible,
+.LogInModal .Modal-body .LogInButtons a:focus-visible,
+.LogInModal .Modal-body .LogInButtons [role='button']:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 3px;
+}
+
+/* 按钮与图标尺寸可在运行时由 CSS 变量覆盖，变量缺失时回退到 LESS 编译值。 */
+@login-button-icon-size: calc(var(--login-button-size, @login-button-size) * 0.43);
+
+.LogInModal .Modal-body .LogInButtons .Button-icon {
+  display: inline-flex;
+  flex: 0 0 @login-button-icon-size;
+  align-items: center;
+  justify-content: center;
+  width: @login-button-icon-size;
+  height: @login-button-icon-size;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  line-height: 1;
+  font-size: 0;
+}
+
+.LogInModal .Modal-body .LogInButtons .icon,
+.LogInModal .Modal-body .LogInButtons i {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: @login-button-icon-size;
+  height: @login-button-icon-size;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  line-height: 1;
+  font-size: @login-button-icon-size;
+}
+
+.LogInModal .Modal-body .LogInButtons svg {
+  display: block;
+  flex: 0 0 auto;
+  width: @login-button-icon-size;
+  height: @login-button-icon-size;
+  vertical-align: middle;
+}
+
+.LogInModal .Modal-body .LogInButtons img {
+  display: block;
+  flex: 0 0 auto;
+  max-width: @login-button-icon-size;
+  max-height: @login-button-icon-size;
+  object-fit: contain;
+}
+
+/* Blessing Skin for Flarum 的图标在更改后有偏移问题，微调图标内容而不移动按钮外框，以达到视觉上修复的效果。（别删） */
+.LogInModal .LogInButtons [data-login-provider='tcs-skin'] > :not(.Button-label):not(.Button-labelText) {
+  position: relative;
+  left: 4px;
+}
+
+.LogInModal .Modal-body .LogInButtons .Button-label,
+.LogInModal .Modal-body .LogInButtons .Button-labelText {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 提示挂载在弹窗之外，使用 Popover 顶层避免被弹窗裁切或遮挡。（防止因为非顶层而造成在消失动画播放时的视觉不美观（测试中发现）） */
+.LoginScreenTooltip {
+  position: fixed;
+  inset: auto;
+  width: max-content;
+  height: auto;
+  margin: 0;
+  z-index: 2147483647;
+  max-width: min(320px, calc(100vw - 24px));
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: rgba(22, 24, 29, 0.96);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+  white-space: normal;
+  pointer-events: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+}
+
+.LoginScreenTooltip:popover-open {
+  display: block;
+}
+
+.LogInModal .Modal-footer {
+  padding: 2px 20px 12px;
+  background: transparent;
+}
+
+.LogInModal .Modal-footer p {
+  margin: 2px 0 0;
+}
+
+.LogInModal .Modal-footer .Button--link {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+@media (max-width: 767px) {
+  .ModalManager:has(> .LogInModal) {
+    display: block;
+  }
+
+  /* Flarum 手机端会叠加顶部导航背景，并为弹窗内容预留导航栏高度；登录弹窗使用独立卡片布局。 */
+  .ModalManager:has(> .LogInModal)::before {
+    display: none;
+  }
+
+  .LogInModal.Modal--small {
+    max-width: calc(100vw - 32px) !important;
+  }
+
+  .LogInModal {
+    width: calc(100vw - 32px);
+    max-width: calc(100vw - 32px) !important;
+    border-radius: 24px;
+  }
+
+  .ModalManager > .LogInModal {
+    margin: 0 auto;
+  }
+
+  .LogInModal .Modal-content {
+    min-height: 100dvh;
+    padding-top: 0 !important;
+    border-radius: 24px;
+  }
+
+  .LogInModal .Modal-header {
+    padding: 32px 24px 24px;
+  }
+
+  .LogInModal .Modal-header h3.App-titleControl {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    width: auto !important;
+    margin: 0;
+    transform: none !important;
+    color: var(--text-color) !important;
+  }
+
+  .LogInModal .Modal-body {
+    padding: 18px 22px 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .LogInModal .FormControl,
+  .LogInModal .Button--primary,
+  .LogInModal .Modal-body .LogInButtons .LogInButton {
+    transition: none;
+  }
+}
