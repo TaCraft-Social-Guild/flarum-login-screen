@@ -334,18 +334,27 @@
   vertical-align: middle;
 }
 
+/*
+ * 按钮自身的 font-size 被置为 0 用于隐藏文字；部分插件（如 Blessing Skin 自定义图标）
+ * 用 em 作为图片的内联宽高，会随字号一起坍缩为 0，导致图标不可见。
+ * 因此这里必须用 !important 显式给出尺寸，压过内联的 em 尺寸。
+ */
 .LogInModal .Modal-body .LogInButtons img,
 .SignUpModal .Modal-body .LogInButtons img {
   display: block;
   flex: 0 0 auto;
+  width: @login-button-icon-size !important;
+  height: @login-button-icon-size !important;
   max-width: @login-button-icon-size;
   max-height: @login-button-icon-size;
+  margin: 0 !important;
   object-fit: contain;
 }
 
 /* Blessing Skin for Flarum 的图标在更改后有偏移问题，微调图标内容而不移动按钮外框，以达到视觉上修复的效果。（别删） */
-.LogInModal .LogInButtons [data-login-provider='tcs-skin'] > :not(.Button-label):not(.Button-labelText),
-.SignUpModal .LogInButtons [data-login-provider='tcs-skin'] > :not(.Button-label):not(.Button-labelText) {
+/* 自定义图片图标由 flex 居中且外边距归零，本身已居中，不再叠加这 4px 偏移。 */
+.LogInModal .LogInButtons [data-login-provider='tcs-skin'] > :not(.Button-label):not(.Button-labelText):not(img),
+.SignUpModal .LogInButtons [data-login-provider='tcs-skin'] > :not(.Button-label):not(.Button-labelText):not(img) {
   position: relative;
   left: 4px;
 }
@@ -361,6 +370,31 @@
   margin: -1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/*
+ * 部分第三方插件（比如bless skin登录插件）会把 <img> 放进 .Button-labelText 的内部，
+ * 上面的 clip 隐藏会把图片一起裁掉，在下面补充以下逻辑：
+ * 含图片时改用 font-size: 0 隐藏文字并还原可见区域，图片尺寸由 .LogInButtons img 规则保证。
+ */
+.LogInModal .Modal-body .LogInButtons .Button-label:has(img),
+.LogInModal .Modal-body .LogInButtons .Button-labelText:has(img),
+.SignUpModal .Modal-body .LogInButtons .Button-label:has(img),
+.SignUpModal .Modal-body .LogInButtons .Button-labelText:has(img) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  clip: auto;
+  font-size: 0 !important;
+  line-height: 0;
   white-space: nowrap;
   border: 0;
 }
