@@ -2,7 +2,8 @@
 import app from 'flarum/forum/app';
 import commonExtend from '../common/extend';
 
-const buttonSelector = '.LogInModal .LogInButtons button, .LogInModal .LogInButtons a, .LogInModal .LogInButtons [role="button"], .SignUpModal .LogInButtons button, .SignUpModal .LogInButtons a, .SignUpModal .LogInButtons [role="button"]';
+const buttonSelector =
+  '.LogInModal .LogInButtons button, .LogInModal .LogInButtons a, .LogInModal .LogInButtons [role="button"], .SignUpModal .LogInButtons button, .SignUpModal .LogInButtons a, .SignUpModal .LogInButtons [role="button"]';
 const tooltipId = 'LoginScreenTooltip';
 const knownProviders = [
   'amazon',
