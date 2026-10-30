@@ -24,7 +24,7 @@
         "post-build-typings": "find dist-typings -type f -name '*.d.ts' -print0 | xargs -0 sed -i.bak 's,../src/@types,@types,g' && find dist-typings -type f -name '*.d.ts.bak' -delete",
         "check-typings": "tsc --noEmit --emitDeclarationOnly false",
         "check-typings-coverage": "typescript-coverage-report",
-        "test": "yarn node --experimental-vm-modules $(yarn bin jest)"
+        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --passWithNoTests"
     },
     "prettier": "@flarum/prettier-config",
     "type": "module"
