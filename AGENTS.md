@@ -217,34 +217,37 @@ tests/integration/setup.php    集成测试数据库初始化脚本
 5. **LESS 变量默认值**：`less/forum.less` 顶部用 `.login-buttons-default() when (default())` 提供 `@login-buttons-per-row: 4`、`@login-button-size: 56px`、`@login-button-tooltip-delay: 500ms`，保证脱离 Flarum 单独编译（IDE 文件监视器、本地校验）时不报错。新增变量必须在这里给默认值。
 6. **不要删除带警告注释的代码块**：
    - 网格区段顶部标注「如果你不知道你在干什么，就别改这一块儿的代码」。
-   - Blessing Skin 图标微调 `.LogInButtons [data-login-provider='tcs-skin'] > :not(.Button-label):not(.Button-labelText) { left: 4px }` 标注「别删」。
+   - Blessing Skin 图标微调 `.LogInButtons [data-login-provider='tcs-skin'] > :not(.Button-label):not(.Button-labelText):not(img) { left: 4px }` 标注「别删」。
    - 两者都是多轮视觉调试的结论，删除后会立即复现历史缺陷。
 7. **LESS 与 JS 的 `max-width` 有意不同**：LESS 用 `calc(100vw - 64px)` 作为无 JS 时的保守兜底，JS 行内值覆盖为 `calc(100vw - 48px)`。看到两者不一致不要「顺手统一」，否则会改变移动端表现。
+8. **`font-size: 0` 会吃掉以 `em` 表达的图片尺寸**（本节附加说明）：按钮上的 `font-size: 0`（用于视觉隐藏文字）会让内联 `width: 1em; height: 1em` 的 `<img>` 计算为 `0px`。Blessing Skin 自定义图标（`<img class="LogInButton-logo" style="width:1em;height:1em">`）正是这种写法，症状是「按钮外框在、图标空白」。
+   - 因此 `.LogInButtons img` 必须用 `width` / `height` + `!important` 显式写成 `@login-button-icon-size`，**不能**只靠 `max-width` / `max-height`（它压不过内联 `width` / `height`）；`margin: 0 !important` 用于压掉插件的 `marginRight: 0.5em`，保证图片真正居中。
+   - `data-login-provider='tcs-skin'` 的 `left: 4px` 只针对字体图标，选择器已用 `:not(img)` 排除图片，避免图片被推偏。
 
 ### C. 提示
 
-8. **提示必须置于顶层**：`#LoginScreenTooltip` 挂载在 `document.body`，用 `popover="manual"` + `showPopover()` 提升到顶层。**不要**放进弹窗内部，否则会被 `.Modal-content` 的 `overflow: hidden` 裁切，且在关闭动画期间出现视觉异常。
+9. **提示必须置于顶层**：`#LoginScreenTooltip` 挂载在 `document.body`，用 `popover="manual"` + `showPopover()` 提升到顶层。**不要**放进弹窗内部，否则会被 `.Modal-content` 的 `overflow: hidden` 裁切，且在关闭动画期间出现视觉异常。
 
 ### D. 构建与产物
 
-9. **`js/dist/` 必须提交**：`extend.php` 直接引用 `js/dist/forum.js` 与 `js/dist/admin.js`；`.gitattributes` 已标记为 `linguist-generated` / `-diff`。改了 `js/src/**` 就必须重新 `npm run build` 并一并提交。
-10. **`less/*.css`、`less/*.css.map` 是本地检查产物**：由 `.idea/watcherTasks.xml` 调用 `vendor/bin/lessc` 生成，**不参与** Flarum 编译，已被 `.gitignore` 忽略。不要提交，也不要让它们进入 `extend.php`。
+10. **`js/dist/` 必须提交**：`extend.php` 直接引用 `js/dist/forum.js` 与 `js/dist/admin.js`；`.gitattributes` 已标记为 `linguist-generated` / `-diff`。改了 `js/src/**` 就必须重新 `npm run build` 并一并提交。
+11. **`less/*.css`、`less/*.css.map` 是本地检查产物**：由 `.idea/watcherTasks.xml` 调用 `vendor/bin/lessc` 生成，**不参与** Flarum 编译，已被 `.gitignore` 忽略。不要提交，也不要让它们进入 `extend.php`。
 
 ### E. 扩展元数据
 
-11. **扩展图标（`icon.svg`）**：`composer.json` 的 `extra.flarum-extension.icon.image` 指向它，Flarum 读取后内联为 base64 `background-image`，渲染在 `.ExtensionIcon` 上。
+12. **扩展图标（`icon.svg`）**：`composer.json` 的 `extra.flarum-extension.icon.image` 指向它，Flarum 读取后内联为 base64 `background-image`，渲染在 `.ExtensionIcon` 上。
     - `.ExtensionIcon` 自身**没有**声明 `background-size` / `background-repeat` / `background-position`，因此必须在 `icon` 里显式写 `backgroundSize: "contain"`、`backgroundRepeat: "no-repeat"`、`backgroundPosition: "center"`（`flarum/gdpr` 同样写法）。
     - SVG 只写 `viewBox`，**不要**加 `width` / `height`，否则会按固有尺寸渲染并被容器裁剪。
     - 需在 25–90px 区间均可辨认（侧栏 25px、扩展页头部 30px、扩展卡片 90px、Widget 28px、禁用态 54px）。
     - `icon` 里不需要 `name` 字段：图片图标由 `background-image` 呈现，`name` 只用于 FontAwesome 类名。
-12. **`composer.json` 的 `extra` 是「安装期快照」，不是实时读取**：`Flarum\Extension\ExtensionManager::getExtensions()` 把 `vendor/composer/installed.json` 中的包元数据直接传给 `Extension` 构造函数，`getIcon()` 用的就是这份快照。
+13. **`composer.json` 的 `extra` 是「安装期快照」，不是实时读取**：`Flarum\Extension\ExtensionManager::getExtensions()` 把 `vendor/composer/installed.json` 中的包元数据直接传给 `Extension` 构造函数，`getIcon()` 用的就是这份快照。
     - 只改本仓库的 `composer.json` **不会生效**，管理端仍显示旧图标（通常是空白或通用占位）。
     - 必须在论坛根目录执行 `composer update tacraft-social-guild/flarum-login-screen` 重写 `installed.json`，再 `php flarum cache:clear`。
     - 判断是否生效：`installed.json` 中该包的 `extra.flarum-extension.icon` 应已包含 `image` 键（检查命令见第 10 节）。
 
 ### F. 文案
 
-13. **双语文案必须同步**：修改 `locale/en.yml` 必须同时修改 `locale/zh.yml`，键名保持一致（当前 7 个 key）。
+14. **双语文案必须同步**：修改 `locale/en.yml` 必须同时修改 `locale/zh.yml`，键名保持一致（当前 7 个 key）。
 
 ## 7. 常见任务配方
 
@@ -290,7 +293,8 @@ tests/integration/setup.php    集成测试数据库初始化脚本
 | 按钮变成竖向排列 | 主题用 `flex-direction: column !important` 强制纵向，且本项目未用 `grid` | 保持 `display: grid !important` 与 `flex-direction: row !important` 同时存在 |
 | 最后一行单按钮不居中 | 未加 `LoginButtons-single-final-item`，或 LESS 的 `grid-column` 被 LESS 当除法 | 检查类名与 `~'1 / -1'` 写法 |
 | Blessing Skin 图标看起来偏左 | 未标记 `data-login-provider="tcs-skin"`，或 `left: 4px` 被删 | 确认 `markTcsSkinButtons()` 命中；恢复该规则 |
-| 悬停提示被弹窗裁切 / 被遮住 | 提示被放进 `.Modal-content`，或未启用 Popover | 提示必须挂在 `document.body`（第 6 节第 8 条） |
+| 第三方插件的图片图标不显示（按钮外框在、图标空白） | 按钮 `font-size: 0` 让内联 `1em` 尺寸坍缩为 `0px`，而 `img` 规则只有 `max-width` | 保留 `.LogInButtons img` 的 `width` / `height` + `!important`（第 6 节第 8 条） |
+| 悬停提示被弹窗裁切 / 被遮住 | 提示被放进 `.Modal-content`，或未启用 Popover | 提示必须挂在 `document.body`（第 6 节第 9 条） |
 | 悬停提示完全不出现 | 按钮及其内部元素没有任何可读文本或可识别的类名 | 为对应插件按钮补 `aria-label` / `title`，或在 `knownProviders` 中登记 |
 | 移动端元素错位、顶部被导航遮罩盖住 | `@media (max-width: 767px)` 内的覆盖规则被删 | 恢复该断点内的 `::before { display: none }` 与标题定位重置 |
 | 管理端扩展图标空白 | `installed.json` 快照未刷新；或缺 `backgroundSize` 等属性 | 执行第 7.4 节流程；核对 `icon` 五项属性 |
