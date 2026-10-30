@@ -2,8 +2,8 @@ name: Login Screen JS
 
 on: [workflow_dispatch, push, pull_request]
 
-# 复用工作流在 main 分支的 push 事件下会把构建产物（js/dist）提交回仓库，
-# 因此必须显式授予写权限，否则 GITHUB_TOKEN 只读，push 会返回 403。
+# 复用工作流只在「push 到 inputs.main_git_branch 指定的分支」时回写构建产物，
+# 本项目不需要 bot 提交 dist，故保持只读权限。
 permissions:
   contents: write
 
@@ -19,6 +19,9 @@ jobs:
       frontend_directory: ./js
       backend_directory: .
       js_package_manager: npm
-      main_git_branch: main
+      # REUSABLE_frontend.yml 没有提供关闭回写的开关，它内部的判定是：
+      #   do_not_commit = github.ref != 'refs/heads/<main_git_branch>' || event_name != 'push'
+      # 这里故意填一个不存在的分支名，让该表达式恒为 true，从而跳过 dist 提交。
+      main_git_branch: __no_auto_commit__
     secrets:
       bundlewatch_github_token: ${{ secrets.BUNDLEWATCH_GITHUB_TOKEN }}

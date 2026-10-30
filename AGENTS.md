@@ -98,7 +98,7 @@
 - `js/package.json` 的 `test` 脚本写死为 `yarn node --experimental-vm-modules $(yarn bin jest)`，依赖 yarn 与 POSIX shell，Windows 下通常不可用。
 - 因此当前的有效质量门禁是：`check-typings` + `format-check` + `build` + `php -l extend.php` + LESS 编译校验。
 - CI 由 Flarum 复用工作流驱动：`.github/workflows/backend.yml`（`REUSABLE_backend.yml@2.x`）、`.github/workflows/frontend.yml`（`REUSABLE_frontend.yml@2.x`，开启 prettier / typescript / tests，关闭 bundlewatch，包管理器为 npm，主分支 `main`）。
-- **CI 会向 `main` 回写构建产物**：`REUSABLE_frontend.yml` 内部把 `do_not_commit` 算成 `ref != refs/heads/main || event_name != push`，即只有「push 到 `main`」时才会执行 `git push` 提交 `js/dist`。因此 `frontend.yml` 必须声明 `permissions: contents: write`，且仓库 Settings → Actions → General → Workflow permissions 需为「Read and write permissions」，否则该步骤会以 `403` / `denied to github-actions[bot]` 失败（构建本身仍会成功，失败只发生在最后的推送）。
+- **CI 不回写构建产物**：`REUSABLE_frontend.yml` 没有提供关闭回写的开关，其内部判定为 `do_not_commit = github.ref != 'refs/heads/<main_git_branch>' || event_name != 'push'`，只有「push 到该分支」时才会 `git push` 提交 `js/dist`。`frontend.yml` 故意把 `main_git_branch` 设为不存在的 `__no_auto_commit__`，使表达式恒为 `true`：CI 只做格式 / 类型 / 构建 / 测试校验，**`js/dist` 一律由本地 `npm run build` 后手动提交**。因此工作流只声明 `permissions: contents: read`，无需仓库开启写权限；若把它改回真实分支名，就会重新出现 `403 denied to github-actions[bot]`。
 
 ## 4. 目录结构
 
