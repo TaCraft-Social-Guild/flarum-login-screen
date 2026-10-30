@@ -1,4 +1,7 @@
-.LogInModal {
+@login-button-tooltip-delay: 500ms;
+
+.LogInModal,
+.SignUpModal {
   --login-button-tooltip-delay: @login-button-tooltip-delay;
   width: 100%;
   max-width: 430px;
@@ -8,34 +11,44 @@
 
 /* 用弹窗管理器的可用视口居中，替代 Flarum 桌面端固定的 120px 上下外边距。 */
 /* 原版是固定边距，有点反人类了。*/
-.ModalManager:has(> .LogInModal) {
+.ModalManager:has(> .LogInModal),
+.ModalManager:has(> .SignUpModal) {
   display: flex;
   align-items: safe center;
   justify-content: center;
 }
 
-.ModalManager > .LogInModal {
+.ModalManager > .LogInModal,
+.ModalManager > .SignUpModal {
   flex: 0 0 auto;
   margin: 10px;
 }
 
 /* Flarum 默认将登录弹窗限制为 375px；按按钮设置扩展宽度，确保指定列数能完整显示。 */
-.LogInModal.Modal--small {
+.LogInModal.Modal--small,
+.SignUpModal.Modal--small {
   width: 100%;
   max-width: 430px !important;
 }
 
-.LogInModal .Modal-content {
-  overflow: hidden;
+.LogInModal .Modal-content,
+.SignUpModal .Modal-content {
   border: 1px solid color-mix(in srgb, var(--control-bg) 75%, transparent);
   border-radius: 28px;
   background: color-mix(in srgb, var(--body-bg) 92%, transparent);
   box-shadow: 0 30px 70px -28px rgba(23, 30, 54, 0.3), 0 2px 10px rgba(23, 30, 54, 0.05);
   backdrop-filter: blur(22px);
   -webkit-backdrop-filter: blur(22px);
+  overflow: hidden;
 }
 
-.LogInModal .Modal-header {
+.LogInModal .Modal-content:has(input:focus),
+.SignUpModal .Modal-content:has(input:focus) {
+  overflow: visible;
+}
+
+.LogInModal .Modal-header,
+.SignUpModal .Modal-header {
   position: relative;
   overflow: hidden;
   padding: 36px 30px 26px;
@@ -44,9 +57,11 @@
     radial-gradient(circle at 100% 0, color-mix(in srgb, var(--primary-color) 18%, transparent), transparent 42%),
     linear-gradient(135deg, color-mix(in srgb, var(--primary-color) 8%, var(--body-bg)), var(--control-bg));
   text-align: center;
+  border-radius: 28px 28px 0 0;
 }
 
-.LogInModal .Modal-header::before {
+.LogInModal .Modal-header::before,
+.SignUpModal .Modal-header::before {
   position: absolute;
   top: -54px;
   right: -34px;
@@ -58,7 +73,8 @@
   pointer-events: none;
 }
 
-.LogInModal .Modal-header::after {
+.LogInModal .Modal-header::after,
+.SignUpModal .Modal-header::after {
   position: absolute;
   top: -26px;
   right: 24px;
@@ -70,7 +86,8 @@
   pointer-events: none;
 }
 
-.LogInModal .Modal-header h3 {
+.LogInModal .Modal-header h3,
+.SignUpModal .Modal-header h3 {
   position: relative;
   z-index: 1;
   margin: 0;
@@ -80,17 +97,21 @@
   letter-spacing: -0.02em;
 }
 
-.LogInModal .Modal-body {
+.LogInModal .Modal-body,
+.SignUpModal .Modal-body {
   padding: 26px 30px 8px;
   background: transparent;
   color: var(--text-color);
+  border-radius: 0 0 28px 28px;
 }
 
-.LogInModal .Form-group {
-  margin-bottom: 8px;
+.LogInModal .Form-group,
+.SignUpModal .Form-group {
+  margin-bottom: 8px !important;
 }
 
-.LogInModal .FormControl {
+.LogInModal .FormControl,
+.SignUpModal .FormControl {
   min-height: 48px;
   padding: 12px 15px;
   border: 1px solid color-mix(in srgb, var(--control-bg) 78%, var(--text-color));
@@ -99,26 +120,31 @@
   transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
-.LogInModal .FormControl::placeholder {
+.LogInModal .FormControl::placeholder,
+.SignUpModal .FormControl::placeholder {
   color: #9aa0a8;
   font-weight: 600;
   opacity: 1;
 }
 
-.LogInModal .FormControl:focus {
+.LogInModal .FormControl:focus,
+.SignUpModal .FormControl:focus {
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 18%, transparent);
 }
 
-.LogInModal .checkbox {
+.LogInModal .checkbox,
+.SignUpModal .checkbox {
   line-height: 1.5;
 }
 
-.LogInModal .checkbox input {
+.LogInModal .checkbox input,
+.SignUpModal .checkbox input {
   accent-color: var(--primary-color);
 }
 
-.LogInModal .Button--primary {
+.LogInModal .Button--primary,
+.SignUpModal .Button--primary {
   min-height: 48px;
   border: 0;
   border-radius: 12px;
@@ -127,25 +153,40 @@
   transition: filter 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
 }
 
-.LogInModal .Button--primary:hover:not(:disabled) {
+.LogInModal .Button--primary:hover:not(:disabled),
+.SignUpModal .Button--primary:hover:not(:disabled) {
   filter: brightness(1.06);
   transform: translateY(-1px);
   box-shadow: 0 14px 26px -12px color-mix(in srgb, var(--primary-color) 85%, transparent);
 }
 
-.LogInModal .Form-group:has(.checkbox) {
-  margin-bottom: 0;
+.LogInModal .Form-group:has(.checkbox),
+.SignUpModal .Form-group:has(.checkbox) {
+  margin-bottom: 0 !important;
 }
 
-.LogInModal .Form-group:has(.Button--primary) {
+.LogInModal .Form-group:has(.Button--primary),
+.SignUpModal .Form-group:has(.Button--primary) {
+  margin-top: 4px !important;
+  margin-bottom: 0 !important;
+}
+
+.LogInModal .helpText,
+.SignUpModal .helpText {
   margin-top: 4px;
-  margin-bottom: 0;
+  font-size: 12px;
+  color: var(--muted-color);
 }
 
-.LogInModal .LogInButtons:empty {
+.LogInModal .Form-group:has(.helpText),
+.SignUpModal .Form-group:has(.helpText) {
+  margin-bottom: 12px !important;
+}
+
+.LogInModal .LogInButtons:empty,
+.SignUpModal .LogInButtons:empty {
   display: none;
 }
-
 
 /*如果你不知道你在干什么，就别改这一块儿的代码（很容易出问题）*/
 /* FoF/OAuth 会为每个登录按钮添加包装层；保持横向换行，并将按钮组居中。 */
@@ -158,38 +199,33 @@
 .login-buttons-default();
 
 .LogInModal .Modal-body .LogInButtons,
-.LogInModal .Modal-body .LogInButtons.FoFLogInButtons--icons {
+.LogInModal .Modal-body .LogInButtons.FoFLogInButtons--icons,
+.SignUpModal .Modal-body .LogInButtons,
+.SignUpModal .Modal-body .LogInButtons.FoFLogInButtons--icons {
   /* 显式输出编译后的列数，论坛端脚本无法读取设置时可回退到该值。 */
   --login-buttons-per-row: @login-buttons-per-row;
   --login-button-size: @login-button-size;
-  display: grid !important;
-  grid-template-columns: repeat(var(--login-buttons-per-row, @login-buttons-per-row), var(--login-button-size, @login-button-size)) !important;
-  grid-auto-flow: row !important;
-  justify-content: center !important;
-  justify-items: center !important;
-  /* 主题（如 Concourse）会以 !important 强制 gap 与纵向排列，这里必须同样使用 !important 才能覆盖。 */
-  gap: 8px !important;
+  display: flex !important;
   flex-direction: row !important;
   flex-wrap: wrap !important;
-  width: max-content !important;
-  max-width: calc(100vw - 64px) !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  gap: 8px !important;
   margin: 0 auto 18px !important;
-}
-
-/* 最后一行只有一个按钮时让它占据整行网格区域，并在该区域内居中。 */
-.LogInModal .Modal-body .LogInButtons > .LoginButtons-single-final-item {
-  /* LESS 会把 “1 / -1” 当作除法，必须原样输出。 */
-  grid-column: ~'1 / -1';
-  justify-self: center;
 }
 
 .LogInModal .Modal-body .LogInButtons > *,
 .LogInModal .Modal-body .LogInButtons > .LogInButton,
-.LogInModal .Modal-body .LogInButtons > .LogInButtonContainer {
+.LogInModal .Modal-body .LogInButtons > .LogInButtonContainer,
+.SignUpModal .Modal-body .LogInButtons > *,
+.SignUpModal .Modal-body .LogInButtons > .LogInButton,
+.SignUpModal .Modal-body .LogInButtons > .LogInButtonContainer {
   display: flex !important;
-  flex: 0 0 var(--login-button-size, @login-button-size) !important;
-  align-items: center;
-  justify-content: center;
+  flex: 0 0 auto !important;
+  align-items: center !important;
+  justify-content: center !important;
   width: var(--login-button-size, @login-button-size) !important;
   min-width: var(--login-button-size, @login-button-size) !important;
   max-width: var(--login-button-size, @login-button-size) !important;
@@ -197,16 +233,21 @@
   min-height: var(--login-button-size, @login-button-size) !important;
   max-height: var(--login-button-size, @login-button-size) !important;
   margin: 0 !important;
+  padding: 0 !important;
 }
 
 .LogInModal .Modal-body .LogInButtons .LogInButton,
 .LogInModal .Modal-body .LogInButtons button,
 .LogInModal .Modal-body .LogInButtons a,
-.LogInModal .Modal-body .LogInButtons [role='button'] {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+.LogInModal .Modal-body .LogInButtons [role='button'],
+.SignUpModal .Modal-body .LogInButtons .LogInButton,
+.SignUpModal .Modal-body .LogInButtons button,
+.SignUpModal .Modal-body .LogInButtons a,
+.SignUpModal .Modal-body .LogInButtons [role='button'] {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
   z-index: 1;
   width: var(--login-button-size, @login-button-size) !important;
   min-width: var(--login-button-size, @login-button-size) !important;
@@ -217,8 +258,8 @@
   aspect-ratio: 1;
   font-size: 0;
   line-height: 1;
-  margin: 0;
-  padding: 10px;
+  margin: 0 !important;
+  padding: 10px !important;
   border: 1px solid color-mix(in srgb, var(--control-bg) 78%, var(--text-color));
   border-radius: 16px;
   background: var(--body-bg);
@@ -229,7 +270,11 @@
 .LogInModal .Modal-body .LogInButtons .LogInButton:hover,
 .LogInModal .Modal-body .LogInButtons button:hover,
 .LogInModal .Modal-body .LogInButtons a:hover,
-.LogInModal .Modal-body .LogInButtons [role='button']:hover {
+.LogInModal .Modal-body .LogInButtons [role='button']:hover,
+.SignUpModal .Modal-body .LogInButtons .LogInButton:hover,
+.SignUpModal .Modal-body .LogInButtons button:hover,
+.SignUpModal .Modal-body .LogInButtons a:hover,
+.SignUpModal .Modal-body .LogInButtons [role='button']:hover {
   border-color: color-mix(in srgb, var(--primary-color) 45%, var(--control-bg));
   box-shadow: 0 10px 20px -12px color-mix(in srgb, var(--primary-color) 65%, transparent);
   transform: translateY(-2px);
@@ -238,15 +283,19 @@
 .LogInModal .Modal-body .LogInButtons .LogInButton:focus-visible,
 .LogInModal .Modal-body .LogInButtons button:focus-visible,
 .LogInModal .Modal-body .LogInButtons a:focus-visible,
-.LogInModal .Modal-body .LogInButtons [role='button']:focus-visible {
+.LogInModal .Modal-body .LogInButtons [role='button']:focus-visible,
+.SignUpModal .Modal-body .LogInButtons .LogInButton:focus-visible,
+.SignUpModal .Modal-body .LogInButtons button:focus-visible,
+.SignUpModal .Modal-body .LogInButtons a:focus-visible,
+.SignUpModal .Modal-body .LogInButtons [role='button']:focus-visible {
   outline: 2px solid var(--primary-color);
   outline-offset: 3px;
 }
 
-/* 按钮与图标尺寸可在运行时由 CSS 变量覆盖，变量缺失时回退到 LESS 编译值。 */
 @login-button-icon-size: calc(var(--login-button-size, @login-button-size) * 0.43);
 
-.LogInModal .Modal-body .LogInButtons .Button-icon {
+.LogInModal .Modal-body .LogInButtons .Button-icon,
+.SignUpModal .Modal-body .LogInButtons .Button-icon {
   display: inline-flex;
   flex: 0 0 @login-button-icon-size;
   align-items: center;
@@ -261,7 +310,9 @@
 }
 
 .LogInModal .Modal-body .LogInButtons .icon,
-.LogInModal .Modal-body .LogInButtons i {
+.LogInModal .Modal-body .LogInButtons i,
+.SignUpModal .Modal-body .LogInButtons .icon,
+.SignUpModal .Modal-body .LogInButtons i {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -274,7 +325,8 @@
   font-size: @login-button-icon-size;
 }
 
-.LogInModal .Modal-body .LogInButtons svg {
+.LogInModal .Modal-body .LogInButtons svg,
+.SignUpModal .Modal-body .LogInButtons svg {
   display: block;
   flex: 0 0 auto;
   width: @login-button-icon-size;
@@ -282,22 +334,35 @@
   vertical-align: middle;
 }
 
-.LogInModal .Modal-body .LogInButtons img {
+/*
+ * 按钮自身的 font-size 被置为 0 用于隐藏文字；部分插件（如 Blessing Skin 自定义图标）
+ * 用 em 作为图片的内联宽高，会随字号一起坍缩为 0，导致图标不可见。
+ * 因此这里必须用 !important 显式给出尺寸，压过内联的 em 尺寸。
+ */
+.LogInModal .Modal-body .LogInButtons img,
+.SignUpModal .Modal-body .LogInButtons img {
   display: block;
   flex: 0 0 auto;
+  width: @login-button-icon-size !important;
+  height: @login-button-icon-size !important;
   max-width: @login-button-icon-size;
   max-height: @login-button-icon-size;
+  margin: 0 !important;
   object-fit: contain;
 }
 
 /* Blessing Skin for Flarum 的图标在更改后有偏移问题，微调图标内容而不移动按钮外框，以达到视觉上修复的效果。（别删） */
-.LogInModal .LogInButtons [data-login-provider='tcs-skin'] > :not(.Button-label):not(.Button-labelText) {
+/* 自定义图片图标由 flex 居中且外边距归零，本身已居中，不再叠加这 4px 偏移。 */
+.LogInModal .LogInButtons [data-login-provider='tcs-skin'] > :not(.Button-label):not(.Button-labelText):not(img),
+.SignUpModal .LogInButtons [data-login-provider='tcs-skin'] > :not(.Button-label):not(.Button-labelText):not(img) {
   position: relative;
   left: 4px;
 }
 
 .LogInModal .Modal-body .LogInButtons .Button-label,
-.LogInModal .Modal-body .LogInButtons .Button-labelText {
+.LogInModal .Modal-body .LogInButtons .Button-labelText,
+.SignUpModal .Modal-body .LogInButtons .Button-label,
+.SignUpModal .Modal-body .LogInButtons .Button-labelText {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -305,6 +370,31 @@
   margin: -1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/*
+ * 部分第三方插件（比如bless skin登录插件）会把 <img> 放进 .Button-labelText 的内部，
+ * 上面的 clip 隐藏会把图片一起裁掉，在下面补充以下逻辑：
+ * 含图片时改用 font-size: 0 隐藏文字并还原可见区域，图片尺寸由 .LogInButtons img 规则保证。
+ */
+.LogInModal .Modal-body .LogInButtons .Button-label:has(img),
+.LogInModal .Modal-body .LogInButtons .Button-labelText:has(img),
+.SignUpModal .Modal-body .LogInButtons .Button-label:has(img),
+.SignUpModal .Modal-body .LogInButtons .Button-labelText:has(img) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  clip: auto;
+  font-size: 0 !important;
+  line-height: 0;
   white-space: nowrap;
   border: 0;
 }
@@ -336,55 +426,68 @@
   display: block;
 }
 
-.LogInModal .Modal-footer {
+.LogInModal .Modal-footer,
+.SignUpModal .Modal-footer {
   padding: 2px 20px 12px;
   background: transparent;
+  border-radius: 0 0 28px 28px;
 }
 
-.LogInModal .Modal-footer p {
+.LogInModal .Modal-footer p,
+.SignUpModal .Modal-footer p {
   margin: 2px 0 0;
 }
 
-.LogInModal .Modal-footer .Button--link {
+.LogInModal .Modal-footer .Button--link,
+.SignUpModal .Modal-footer .Button--link {
   color: var(--primary-color);
   font-weight: 600;
 }
 
 @media (max-width: 767px) {
-  .ModalManager:has(> .LogInModal) {
+  .ModalManager:has(> .LogInModal),
+  .ModalManager:has(> .SignUpModal) {
     display: block;
   }
 
   /* Flarum 手机端会叠加顶部导航背景，并为弹窗内容预留导航栏高度；登录弹窗使用独立卡片布局。 */
-  .ModalManager:has(> .LogInModal)::before {
+  .ModalManager:has(> .LogInModal)::before,
+  .ModalManager:has(> .SignUpModal)::before {
     display: none;
   }
 
-  .LogInModal.Modal--small {
+  .LogInModal.Modal--small,
+  .SignUpModal.Modal--small {
     max-width: calc(100vw - 32px) !important;
   }
 
-  .LogInModal {
+  .LogInModal,
+  .SignUpModal {
     width: calc(100vw - 32px);
     max-width: calc(100vw - 32px) !important;
     border-radius: 24px;
   }
 
-  .ModalManager > .LogInModal {
+  .ModalManager > .LogInModal,
+  .ModalManager > .SignUpModal {
     margin: 0 auto;
   }
 
-  .LogInModal .Modal-content {
+  .LogInModal .Modal-content,
+  .SignUpModal .Modal-content {
     min-height: 100dvh;
     padding-top: 0 !important;
     border-radius: 24px;
   }
 
-  .LogInModal .Modal-header {
+  .LogInModal .Modal-header,
+  .SignUpModal .Modal-header {
     padding: 32px 24px 24px;
+    border-radius: 24px 24px 0 0;
   }
 
-  .LogInModal .Modal-header h3.App-titleControl {
+  .LogInModal .Modal-header h3.App-titleControl,
+  .SignUpModal .Modal-header h3.App-titleControl {
     position: relative !important;
     top: auto !important;
     left: auto !important;
@@ -394,15 +497,88 @@
     color: var(--text-color) !important;
   }
 
-  .LogInModal .Modal-body {
+  .LogInModal .Modal-body,
+  .SignUpModal .Modal-body {
     padding: 18px 22px 2px;
+  }
+
+  .LogInModal .Modal-footer,
+  .SignUpModal .Modal-footer {
+    border-radius: 0 0 24px 24px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .LogInModal .FormControl,
   .LogInModal .Button--primary,
-  .LogInModal .Modal-body .LogInButtons .LogInButton {
+  .LogInModal .Modal-body .LogInButtons .LogInButton,
+  .SignUpModal .FormControl,
+  .SignUpModal .Button--primary,
+  .SignUpModal .Modal-body .LogInButtons .LogInButton {
     transition: none;
   }
+}
+
+.LogInModal .PasswordField,
+.SignUpModal .PasswordField {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.LogInModal .PasswordField .FormControl,
+.SignUpModal .PasswordField .FormControl {
+  padding-right: 40px !important;
+}
+
+.LogInModal .EyeButton,
+.SignUpModal .EyeButton {
+  position: absolute !important;
+  right: 14px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  margin: 0 !important;
+  padding: 4px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 10 !important;
+  cursor: pointer !important;
+}
+
+.LogInModal .EyeButton .icon,
+.SignUpModal .EyeButton .icon {
+  font-size: 16px !important;
+  color: var(--text-color) !important;
+  margin: 0 !important;
+}
+
+.SignUpModal .Form-group > label,
+.LogInModal .Form-group > label {
+  display: none !important;
+}
+
+.SignUpModal .Form-group,
+.LogInModal .Form-group {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+}
+
+.SignUpModal .Form-group > .FormControl,
+.LogInModal .Form-group > .FormControl {
+  margin: 0 !important;
+  padding: 0 15px !important;
+  line-height: 48px !important;
+  height: 48px !important;
+  display: flex !important;
+  align-items: center !important;
+  vertical-align: middle !important;
+}
+
+.SignUpModal textarea.FormControl,
+.LogInModal textarea.FormControl {
+  padding: 12px 15px !important;
+  line-height: 1.5 !important;
+  display: block !important;
 }

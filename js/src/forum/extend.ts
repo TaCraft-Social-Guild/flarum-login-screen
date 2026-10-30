@@ -2,7 +2,8 @@
 import app from 'flarum/forum/app';
 import commonExtend from '../common/extend';
 
-const buttonSelector = '.LogInModal .LogInButtons button, .LogInModal .LogInButtons a, .LogInModal .LogInButtons [role="button"]';
+const buttonSelector =
+  '.LogInModal .LogInButtons button, .LogInModal .LogInButtons a, .LogInModal .LogInButtons [role="button"], .SignUpModal .LogInButtons button, .SignUpModal .LogInButtons a, .SignUpModal .LogInButtons [role="button"]';
 const tooltipId = 'LoginScreenTooltip';
 const knownProviders = [
   'amazon',
@@ -146,7 +147,7 @@ function beginTooltip(button: HTMLElement): void {
   if (!button.hasAttribute('aria-label')) button.setAttribute('aria-label', label);
   button.removeAttribute('title');
   activeButton = button;
-  const delay = getTooltipDelay(button.closest<HTMLElement>('.LogInModal'));
+  const delay = getTooltipDelay(button.closest<HTMLElement>('.LogInModal, .SignUpModal'));
 
   pendingTooltip = window.setTimeout(() => showTooltip(button), delay);
 }
@@ -154,7 +155,7 @@ function beginTooltip(button: HTMLElement): void {
 function findLoginButton(target: EventTarget | null): HTMLElement | null {
   if (!(target instanceof Element)) return null;
   const button = target.closest<HTMLElement>(buttonSelector);
-  return button && button.closest('.LogInModal') ? button : null;
+  return button && (button.closest('.LogInModal') || button.closest('.SignUpModal')) ? button : null;
 }
 
 function markTcsSkinButtons(root: ParentNode): void {
@@ -310,10 +311,11 @@ function applyButtonLayout(container: HTMLElement): void {
 }
 
 function updateLoginButtonLayouts(root: ParentNode): void {
+  const selector = '.LogInModal .LogInButtons, .SignUpModal .LogInButtons';
   const containers =
-    root instanceof HTMLElement && root.matches('.LogInModal .LogInButtons')
-      ? [root, ...Array.from(root.querySelectorAll<HTMLElement>('.LogInModal .LogInButtons'))]
-      : Array.from(root.querySelectorAll<HTMLElement>('.LogInModal .LogInButtons'));
+    root instanceof HTMLElement && root.matches(selector)
+      ? [root, ...Array.from(root.querySelectorAll<HTMLElement>(selector))]
+      : Array.from(root.querySelectorAll<HTMLElement>(selector));
 
   containers.forEach(applyButtonLayout);
 }
@@ -354,7 +356,7 @@ function setupLoginScreen(): void {
           node.querySelector('.LogInButtons') !== null;
         if (!isLoginNode) return;
 
-        const modal = node.closest('.LogInModal');
+        const modal = node.closest('.LogInModal') || node.closest('.SignUpModal');
         if (!modal) return;
 
         markTcsSkinButtons(modal);
