@@ -8,7 +8,7 @@
     "license": "MIT",
     "require": {
         "flarum/core": "^2.0",
-        "tacraft-sociality/flarum-blessing-oauth": "^1.0"
+        "tacraft-sociality/flarum-blessing-oauth": "*"
     },
     "authors": [
         {
